@@ -1,5 +1,5 @@
 ﻿
-using ClassLibrary.Helpers;
+using Langchips.Helpers;
 using Langchips.Models;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
