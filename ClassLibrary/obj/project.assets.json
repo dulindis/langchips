@@ -14,9 +14,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pauli\\source\\repos\\Jonaszek\\ClassLibrary\\ClassLibrary.csproj",
-      "projectName": "ClassLibrary",
-      "projectPath": "C:\\Users\\pauli\\source\\repos\\Jonaszek\\ClassLibrary\\ClassLibrary.csproj",
+      "projectUniqueName": "C:\\Users\\pauli\\source\\repos\\Jonaszek\\ClassLibrary\\Langchips.Models.csproj",
+      "projectName": "Langchips.Models",
+      "projectPath": "C:\\Users\\pauli\\source\\repos\\Jonaszek\\ClassLibrary\\Langchips.Models.csproj",
       "packagesPath": "C:\\Users\\pauli\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\pauli\\source\\repos\\Jonaszek\\ClassLibrary\\obj\\",
       "projectStyle": "PackageReference",

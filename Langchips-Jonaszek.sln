@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication", "ConsoleApplication\ConsoleApplication.csproj", "{6A729A4D-F9F3-405A-839F-5739DF77ADC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langchips.ConsoleApplication", "ConsoleApplication\Langchips.ConsoleApplication.csproj", "{6A729A4D-F9F3-405A-839F-5739DF77ADC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary", "ClassLibrary\ClassLibrary.csproj", "{EEC93EA4-BC8C-4B9B-9B80-EDD6D9C4CA22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langchips.Models", "ClassLibrary\Langchips.Models.csproj", "{EEC93EA4-BC8C-4B9B-9B80-EDD6D9C4CA22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langchips.Data", "Langchips.Data\Langchips.Data.csproj", "{5506F150-C969-440D-9481-5A256E17B9EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langchips.Tests", "Langchips.Tests\Langchips.Tests.csproj", "{AD17E157-8540-48D7-ABC7-CABF83E0463B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{EEC93EA4-BC8C-4B9B-9B80-EDD6D9C4CA22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEC93EA4-BC8C-4B9B-9B80-EDD6D9C4CA22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEC93EA4-BC8C-4B9B-9B80-EDD6D9C4CA22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5506F150-C969-440D-9481-5A256E17B9EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5506F150-C969-440D-9481-5A256E17B9EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5506F150-C969-440D-9481-5A256E17B9EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5506F150-C969-440D-9481-5A256E17B9EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD17E157-8540-48D7-ABC7-CABF83E0463B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD17E157-8540-48D7-ABC7-CABF83E0463B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD17E157-8540-48D7-ABC7-CABF83E0463B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD17E157-8540-48D7-ABC7-CABF83E0463B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
