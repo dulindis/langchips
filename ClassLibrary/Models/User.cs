@@ -1,4 +1,5 @@
 ﻿using Langchips.Helpers;
+using Langchips.Models.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -45,27 +46,27 @@ namespace Langchips.Models
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
         public DateTime? LastLoginAt { get; private set; }
 
+        public ICollection<Folder> Folders { get; set; } = new List<Folder>();  // One-to-Many Relationship
 
-
-        //public List<String> DictionaryIdList { get; set; }
-
-        //private List<Dictionary> Dictionaries { get; set; }
-
-        public User() { }
+        public User() {
+            CreatedAt = DateTime.UtcNow;
+        }
 
         public User(string name, string surname, string email, string password, string username)
         {
             Name = name;
             Surname = surname;
             Email = email;
-            Username = username;
+            Username = username; // TODO: ensure unique username <------
             SetPassword(password);
-            //DictionaryIdList = new List<String>();
-            //Dictionaries = new List<Dictionary>();
+            //Folders = RetrieveUserFolders();
         }
 
         public void SetPassword(string password)
         {
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException("Password cannot be null or empty", nameof(password));
+
             Salt = PasswordHasher.GenerateSalt();
             PasswordHash = PasswordHasher.HashPassword(password, Salt);
         }
@@ -73,6 +74,9 @@ namespace Langchips.Models
         // Verify password
         public bool VerifyPassword(string password)
         {
+            if (string.IsNullOrEmpty(password))
+                throw new ArgumentException("Password cannot be null or empty", nameof(password));
+
             return PasswordHasher.VerifyPassword(password, Salt, PasswordHash);
         }
 
