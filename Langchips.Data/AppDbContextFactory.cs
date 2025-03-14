@@ -10,7 +10,6 @@ namespace Langchips.Data
         {
             var basePath = Directory.GetCurrentDirectory();
 
-            // Load configuration from appsettings.json
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
