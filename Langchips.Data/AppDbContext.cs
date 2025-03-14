@@ -22,15 +22,17 @@ namespace Langchips.Data
         public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration? configuration = null)
         : base(options)
         {
-            if (configuration != null)
-            {
-                _connectionString = configuration.GetConnectionString("DefaultConnection")
-                                    ?? throw new InvalidOperationException("Database connection string is missing.");
-            }
-            else
-            {
-                _connectionString = string.Empty;
-            }
+            _connectionString = configuration.GetConnectionString("DefaultConnection")
+                            ?? throw new InvalidOperationException("Database connection string is missing.");
+            //if (configuration != null)
+            //{
+            //    _connectionString = configuration.GetConnectionString("DefaultConnection")
+            //                        ?? throw new InvalidOperationException("Database connection string is missing.");
+            //}
+            //else
+            //{
+            //    _connectionString = string.Empty;
+            //}
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
@@ -42,16 +44,11 @@ namespace Langchips.Data
         }
         public string GetDataDirectory()
         {
-           
-            using (var connection = new NpgsqlConnection(_connectionString))
-            {
-                connection.Open();
-                using (var command = new NpgsqlCommand("SHOW data_directory;", connection))
-                {
-                    var result = command.ExecuteScalar();
-                    return result?.ToString() ?? "Unknown";
-                }
-            }
+            using var connection = new NpgsqlConnection(_connectionString); 
+            connection.Open();
+            using var command = new NpgsqlCommand("SHOW data_directory;", connection);
+            var result = command.ExecuteScalar();
+            return result?.ToString() ?? "Unknown";
         }
 
         //public override int SaveChanges()
