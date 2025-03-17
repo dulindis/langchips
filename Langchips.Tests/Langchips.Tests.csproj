@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary\Langchips.Models.csproj" />
+    <ProjectReference Include="..\Langchips.Services\Langchips.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
