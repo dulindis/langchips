@@ -1,5 +1,6 @@
 ﻿using Langchips.Blazor.Components;
 using Langchips.Data;
+using Langchips.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,16 +15,21 @@ namespace Langchips.Blazor
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            builder.Services.AddScoped<ConfigurationService>();
+
             builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+            {
+
+                var configurationService = serviceProvider.GetRequiredService<ConfigurationService>();
+                var connectionString = configurationService.GetConnectionString("DefaultConnection");
+
+                if (string.IsNullOrEmpty(connectionString))
                 {
-                var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    var connectionString = configuration.GetConnectionString("DefaultConnection");
-                    if (string.IsNullOrEmpty(connectionString))
-                    {
-                        throw new InvalidOperationException("Database connection string is missing.");
-                    }
-                    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+                    throw new InvalidOperationException("Database connection string is missing.");
                 }
+
+                options.UseNpgsql(connectionString);
+            }
             );
 
             var app = builder.Build();

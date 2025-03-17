@@ -1116,6 +1116,19 @@
         "runtime": {
           "bin/placeholder/Langchips.Models.dll": {}
         }
+      },
+      "Langchips.Services/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Langchips.Data": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Langchips.Services.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Langchips.Services.dll": {}
+        }
       }
     }
   },
@@ -3223,12 +3236,18 @@
       "type": "project",
       "path": "../ClassLibrary/Langchips.Models.csproj",
       "msbuildProject": "../ClassLibrary/Langchips.Models.csproj"
+    },
+    "Langchips.Services/1.0.0": {
+      "type": "project",
+      "path": "../Langchips.Services/Langchips.Services.csproj",
+      "msbuildProject": "../Langchips.Services/Langchips.Services.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
       "Langchips.Data >= 1.0.0",
       "Langchips.Models >= 1.0.0",
+      "Langchips.Services >= 1.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.2",
       "Microsoft.Extensions.Configuration >= 9.0.2",
       "Microsoft.Extensions.Configuration.Json >= 9.0.2",
@@ -3272,6 +3291,9 @@
             },
             "C:\\Users\\pauli\\source\\repos\\Jonaszek\\Langchips.Data\\Langchips.Data.csproj": {
               "projectPath": "C:\\Users\\pauli\\source\\repos\\Jonaszek\\Langchips.Data\\Langchips.Data.csproj"
+            },
+            "C:\\Users\\pauli\\source\\repos\\Jonaszek\\Langchips.Services\\Langchips.Services.csproj": {
+              "projectPath": "C:\\Users\\pauli\\source\\repos\\Jonaszek\\Langchips.Services\\Langchips.Services.csproj"
             }
           }
         }

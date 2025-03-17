@@ -2,6 +2,7 @@
 using Langchips.Data;
 using Langchips.Helpers;
 using Langchips.Models;
+using Langchips.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,7 @@ namespace Langchips.ConsoleApplication
                 .Build();
 
             var services = new ServiceCollection();
-            services.AddSingleton<IConfiguration>(configuration);
+            services.AddSingleton<ConfigurationService>();
 
             services.AddSingleton<AppDbContext>(provider =>
             {

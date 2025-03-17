@@ -24,17 +24,7 @@ namespace Langchips.Data
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection")
                             ?? throw new InvalidOperationException("Database connection string is missing.");
-            //if (configuration != null)
-            //{
-            //    _connectionString = configuration.GetConnectionString("DefaultConnection")
-            //                        ?? throw new InvalidOperationException("Database connection string is missing.");
-            //}
-            //else
-            //{
-            //    _connectionString = string.Empty;
-            //}
         }
-
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             if (!options.IsConfigured && !string.IsNullOrEmpty(_connectionString))
