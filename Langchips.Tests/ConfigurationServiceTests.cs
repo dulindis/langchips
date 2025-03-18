@@ -8,7 +8,7 @@ public class ConfigurationServiceTests
     public void Setup()
     {
     }
-
+     
     [Test]
     public void GetConnectionString_ReturnsExpectedConnectionString()
     {
