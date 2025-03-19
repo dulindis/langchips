@@ -14,7 +14,6 @@ namespace Langchips.Models.Helpers
         {
             if (!dbContext.Users.Any())
             {
-                // Create users
                 var users = new List<User>
                 {
                     new User("John", "Doe", "john.doe@example.com", "Password123", "john_doe"),
@@ -24,11 +23,9 @@ namespace Langchips.Models.Helpers
                     new User("Charlie", "Brown", "charlie.brown@example.com", "Password123", "charlie_brown")
                 };
 
-                // Add users to the context
                 dbContext.Users.AddRange(users);
-                dbContext.SaveChanges();  // Save to generate user Ids
+                dbContext.SaveChanges();
 
-                // Create sets for each user
                 foreach (var user in users)
                 {
                     // Create a set for the user
@@ -49,11 +46,9 @@ namespace Langchips.Models.Helpers
                         }
                     };
 
-                    // Add the set to the database context
                     dbContext.Sets.Add(set);
                 }
 
-                // Save changes to the database
                 dbContext.SaveChanges();
 
                 Console.WriteLine("Sample data has been seeded.");

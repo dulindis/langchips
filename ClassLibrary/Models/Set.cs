@@ -17,7 +17,7 @@ namespace Langchips.Models.Models
         public string? Folder { get; set; } = "Default";
         [Required]
         public Guid UserId { get; set; } //foreign key - always required
-        public  User User { get; set; }
+        public User User { get; set; }
         [Required]
         public Language TermLanguage { get; set; }
 
