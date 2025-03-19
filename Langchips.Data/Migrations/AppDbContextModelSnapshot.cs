@@ -17,35 +17,10 @@ namespace Langchips.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Langchips.Models.Models.Folder", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("UserId1")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("Folder");
-                });
 
             modelBuilder.Entity("Langchips.Models.Models.Set", b =>
                 {
@@ -55,8 +30,14 @@ namespace Langchips.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("FolderId")
-                        .HasColumnType("integer");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Folder")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -72,9 +53,14 @@ namespace Langchips.Data.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("FolderId");
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Sets");
                 });
@@ -87,18 +73,45 @@ namespace Langchips.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("InputPhrase")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
                     b.Property<int>("SetId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SetId");
 
-                    b.ToTable("Term");
+                    b.ToTable("Terms");
+                });
+
+            modelBuilder.Entity("Langchips.Models.Models.Translation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int>("Language")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TermId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TermId");
+
+                    b.ToTable("Translations");
                 });
 
             modelBuilder.Entity("Langchips.Models.User", b =>
@@ -148,24 +161,19 @@ namespace Langchips.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Langchips.Models.Models.Folder", b =>
+            modelBuilder.Entity("Langchips.Models.Models.Set", b =>
                 {
                     b.HasOne("Langchips.Models.User", "User")
-                        .WithMany("Folders")
-                        .HasForeignKey("UserId1")
+                        .WithMany("CreatedSets")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Langchips.Models.User", null)
+                        .WithMany("OwnedSets")
+                        .HasForeignKey("UserId1");
+
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Langchips.Models.Models.Set", b =>
-                {
-                    b.HasOne("Langchips.Models.Models.Folder", "Folder")
-                        .WithMany("Sets")
-                        .HasForeignKey("FolderId");
-
-                    b.Navigation("Folder");
                 });
 
             modelBuilder.Entity("Langchips.Models.Models.Term", b =>
@@ -179,9 +187,15 @@ namespace Langchips.Data.Migrations
                     b.Navigation("Set");
                 });
 
-            modelBuilder.Entity("Langchips.Models.Models.Folder", b =>
+            modelBuilder.Entity("Langchips.Models.Models.Translation", b =>
                 {
-                    b.Navigation("Sets");
+                    b.HasOne("Langchips.Models.Models.Term", "Term")
+                        .WithMany("Translations")
+                        .HasForeignKey("TermId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Term");
                 });
 
             modelBuilder.Entity("Langchips.Models.Models.Set", b =>
@@ -189,9 +203,16 @@ namespace Langchips.Data.Migrations
                     b.Navigation("Terms");
                 });
 
+            modelBuilder.Entity("Langchips.Models.Models.Term", b =>
+                {
+                    b.Navigation("Translations");
+                });
+
             modelBuilder.Entity("Langchips.Models.User", b =>
                 {
-                    b.Navigation("Folders");
+                    b.Navigation("CreatedSets");
+
+                    b.Navigation("OwnedSets");
                 });
 #pragma warning restore 612, 618
         }

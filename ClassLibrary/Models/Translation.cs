@@ -5,21 +5,21 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace Langchips.Models.Models
 {
-    public class Term
+    public class Translation : ITranslatable
     {
         public int Id { get; set; }
 
         [Required]
-        [StringLength(255)]
-        public string InputPhrase { get; set; }
+        [StringLength(500)]
+        public string Content { get; set; }
 
         [Required]
-        public int SetId { get; set; }
-        public Set Set { get; set; }
-        public List<Translation> Translations { get; set; } = new List<Translation>(); // Up to 3 translations
+        public Language Language { get; set; }
+
+        public int TermId { get; set; }
+        public Term Term { get; set; } = null!;
     }
 }

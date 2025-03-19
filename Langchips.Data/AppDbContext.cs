@@ -14,8 +14,10 @@ namespace Langchips.Data
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<Set> Sets { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Set> Sets { get; set; }
+        public virtual DbSet<Term> Terms { get; set; }
+        public virtual DbSet<Translation> Translations { get; set; }
 
         private readonly string _connectionString;
 
@@ -32,14 +34,47 @@ namespace Langchips.Data
                 options.UseNpgsql(_connectionString);
             }
         }
-        public string GetDataDirectory()
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            using var connection = new NpgsqlConnection(_connectionString); 
-            connection.Open();
-            using var command = new NpgsqlCommand("SHOW data_directory;", connection);
-            var result = command.ExecuteScalar();
-            return result?.ToString() ?? "Unknown";
+            // User - Set relationship (One-to-Many)
+            modelBuilder.Entity<Set>()
+                .HasOne(s => s.User) // Set has one User (creator)
+                .WithMany(u => u.CreatedSets) // User can have many created Sets
+                .HasForeignKey(s => s.UserId) // Foreign key on Set entity
+                .OnDelete(DeleteBehavior.Cascade); // When User is deleted, delete the Sets
+
+            // Set - Term relationship (One-to-Many)
+            modelBuilder.Entity<Term>()
+                .HasOne(t => t.Set) // Term belongs to one Set
+                .WithMany(s => s.Terms) // Set can have many Terms
+                .HasForeignKey(t => t.SetId) // Foreign key on Term entity
+                .OnDelete(DeleteBehavior.Cascade); // When Set is deleted, delete the Terms
+
+            // Term - Translation relationship (One-to-Many)
+            modelBuilder.Entity<Translation>()
+                .HasOne(t => t.Term) // Translation belongs to one Term
+                .WithMany(te => te.Translations) // Term can have many Translations
+                .HasForeignKey(t => t.TermId) // Foreign key on Translation entity
+                .OnDelete(DeleteBehavior.Cascade); // When Term is deleted, delete the Translations
+
+            // If Language is an enum, you don't need to define a relationship here, 
+            // you can just let it be stored as a simple integer in the database.
+            modelBuilder.Entity<Set>()
+                .Property(s => s.TermLanguage) // Store as an integer (enum value)
+                .IsRequired();
+
+            modelBuilder.Entity<Set>()
+                .Property(s => s.TranslationLanguage) // Store as an integer (enum value)
+                .IsRequired();
         }
+        //public string GetDataDirectory()
+        //{
+        //    using var connection = new NpgsqlConnection(_connectionString); 
+        //    connection.Open();
+        //    using var command = new NpgsqlCommand("SHOW data_directory;", connection);
+        //    var result = command.ExecuteScalar();
+        //    return result?.ToString() ?? "Unknown";
+        //}
 
         //public override int SaveChanges()
         //{

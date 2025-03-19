@@ -26,6 +26,9 @@ namespace Langchips.Models
         public string Surname { get; set; }
 
         [Required]
+        [StringLength(50)]
+        public string Username { get; set; }
+        [Required]
         [EmailAddress]
         [StringLength(100)]
         public string Email { get; set; }
@@ -39,14 +42,12 @@ namespace Langchips.Models
         [StringLength(50)]
         public string Salt { get; private set; }
 
-        [Required]
-        [StringLength(50)]
-        public string Username { get; set; }
-
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
         public DateTime? LastLoginAt { get; private set; }
 
-        public ICollection<Folder> Folders { get; set; } = new List<Folder>();  // One-to-Many Relationship
+        public ICollection<Set> CreatedSets { get; set; } = new List<Set>();  // Sets created by user
+        public ICollection<Set> OwnedSets { get; set; } = new List<Set>();    // Sets owned by user
+        //public ICollection<Folder> Folders { get; set; } = new List<Folder>();  // One-to-Many Relationship
 
         public User() {
             CreatedAt = DateTime.UtcNow;

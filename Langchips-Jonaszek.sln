@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langchips.Services", "Langc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langchips.Blazor", "Langchips.Blazor\Langchips.Blazor.csproj", "{D3AA7EC1-4B1D-462B-AAF1-32AE96C38C36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langchips.API", "Langchips.API\Langchips.API.csproj", "{CC837653-951E-4B13-A087-8DA0E7674E21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Langchips.Api", "Langchips.API\Langchips.Api.csproj", "{CC837653-951E-4B13-A087-8DA0E7674E21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

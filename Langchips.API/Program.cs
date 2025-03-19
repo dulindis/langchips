@@ -1,7 +1,10 @@
 ﻿
 using Langchips.Data;
+using Langchips.Models.Models;
+using Langchips.Models;
 using Langchips.Services;
 using Microsoft.EntityFrameworkCore;
+using Langchips.Models.Helpers;
 
 
 namespace Langchips.API
@@ -49,6 +52,7 @@ namespace Langchips.API
             using (var scope = app.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                dbContext.Database.Migrate();
                 try
                 {
                     if (dbContext.Database.CanConnect())
@@ -64,6 +68,8 @@ namespace Langchips.API
                 {
                     Console.WriteLine($"❌ Database connection error: {ex.Message}");
                 }
+
+                DbSeeder.SeedData(dbContext);        
             }
 
             // Configure the HTTP request pipeline.
@@ -77,9 +83,6 @@ namespace Langchips.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
-
-
 
             app.MapControllers();
 
