@@ -20,5 +20,10 @@ namespace Langchips.Services
             return _configuration.GetConnectionString(name)
                    ?? throw new InvalidOperationException($"Database connection string '{name}' is missing.");
         }
+        public string GetApiBaseUrl(string name = "ApiBaseUrl")
+        {
+            return _configuration[name]
+                   ?? throw new InvalidOperationException("API base URL is missing.");
+        }
     }
 }

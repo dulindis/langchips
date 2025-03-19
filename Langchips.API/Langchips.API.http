@@ -1,0 +1,6 @@
+@Langchips.API_HostAddress = http://localhost:5115
+
+GET {{Langchips.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

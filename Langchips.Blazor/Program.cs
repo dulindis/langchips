@@ -1,6 +1,8 @@
-﻿using Langchips.Blazor.Components;
+﻿using Langchips.Blazor.AuthProviders;
+using Langchips.Blazor.Components;
 using Langchips.Data;
 using Langchips.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,44 +17,20 @@ namespace Langchips.Blazor
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            builder.Services.AddScoped<ConfigurationService>();
+            builder.Services.AddAuthorizationCore();
 
-            builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
-            {
+            builder.Services.AddScoped<AuthenticationStateProvider, TestAuthStateProvider>();
 
-                var configurationService = serviceProvider.GetRequiredService<ConfigurationService>();
-                var connectionString = configurationService.GetConnectionString("DefaultConnection");
+            builder.Services.AddSingleton<ConfigurationService>();
+            var configService = new ConfigurationService(builder.Configuration);
+            var apiBaseUrl = configService.GetApiBaseUrl();
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseUrl) });
 
-                if (string.IsNullOrEmpty(connectionString))
-                {
-                    throw new InvalidOperationException("Database connection string is missing.");
-                }
+            builder.Services.AddScoped<ApiService>();
 
-                options.UseNpgsql(connectionString);
-            }
-            );
 
-            var app = builder.Build();
+            var app = builder.Build();//TODO: async
 
-            using (var scope = app.Services.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                try
-                {
-                    if (dbContext.Database.CanConnect())
-                    {
-                        Console.WriteLine("✅ Database connection successful!");
-                    }
-                    else
-                    {
-                        Console.WriteLine("❌ Failed to connect to Database.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"❌ Database connection error: {ex.Message}");
-                }
-            }
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -70,6 +48,8 @@ namespace Langchips.Blazor
                 .AddInteractiveServerRenderMode();
 
             app.Run();
+            //await builder.Build().RunAsync();
+
         }
     }
 }

@@ -1,7 +1,21 @@
 ﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="page">
-    <div class="sidebar">
+
+    <AuthorizeView>
+        <Authorized>
+            The user is authorized
+        </Authorized>
+        <NotAuthorized>
+            The User is not authorized
+        </NotAuthorized>
+    </AuthorizeView>
+
+@*     <div class="sidebar">
         <NavMenu />
     </div>
 
@@ -11,13 +25,47 @@
         </div>
 
         <article class="content px-4">
-            @Body
+            @if (IsLoggedIn)
+            {
+                @Body
+            }
+            else
+            {
+                <Home/>
+            }
         </article>
     </main>
 </div>
 
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
+ *@
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
 </div>
+
+@* 
+@code {
+    private bool IsLoggedIn;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        // Simulate a logged-in user for testing (this should come from an actual authentication system)
+        // In real apps, use AuthenticationStateProvider to check if the user is logged in.
+       // IsLoggedIn = authState.User.Identity.IsAuthenticated;
+
+        // You could also simulate a fake user login by hardcoding the result:
+        // For testing purposes, you could manually set IsLoggedIn to true
+        //IsLoggedIn = true; // Simulate a logged-in user
+
+        // Or simulate a non-logged-in user (for example, if the authentication fails)
+        IsLoggedIn = false; // Simulate a not logged-in user
+    }
+} *@
+
+        @code {
+    //var result = await Http.GetFromJsonAsync<YourModel>("api/your-endpoint");
+
+        }
