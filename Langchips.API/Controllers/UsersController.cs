@@ -74,12 +74,49 @@ namespace Langchips.Api.Controllers
             user.SetPassword(userDTO.Password);
 
             _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok(user);
-            //_context.Users.Add(user);
-            //await _context.SaveChangesAsync();
-            //return CreatedAtAction("GetUserById", new { id = user.Id }, user);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<User>> EditUser(Guid id, UserDTO userDTO)
+        {
+            var otherUser = await _context.Users.FirstOrDefaultAsync(u => u.Id != id && u.Email == userDTO.Email);
+            if (otherUser != null)
+            {
+                ModelState.AddModelError("Email", "The email address is already used.");
+                var validation = new ValidationProblemDetails(ModelState);
+                return BadRequest(validation);
+            }
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            user.Name = userDTO.Name;
+            user.Surname = userDTO.Surname;
+            user.Email = userDTO.Email;
+            user.Username = userDTO.Username;
+            user.SetPassword(userDTO.Password);
+            //user.Phone = userDTO.Phone ?? "";
+            await _context.SaveChangesAsync();
+
+            return Ok(user);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<User>> DeteleUser(Guid id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return Ok(user);
         }
     }
 }
