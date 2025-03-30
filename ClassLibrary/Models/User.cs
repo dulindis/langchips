@@ -45,21 +45,26 @@ namespace Langchips.Models
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
         public DateTime? LastLoginAt { get; private set; }
 
+        //public string Phone { get; set; }
         public ICollection<Set> CreatedSets { get; set; } = new List<Set>();  // Sets created by user
         public ICollection<Set> OwnedSets { get; set; } = new List<Set>();    // Sets owned by user
         //public ICollection<Folder> Folders { get; set; } = new List<Folder>();  // One-to-Many Relationship
 
+        //TODO: add status field and add updatedfield, aybe phone field
         public User() {
             CreatedAt = DateTime.UtcNow;
         }
 
-        public User(string name, string surname, string email, string password, string username)
+        public User(string name, string surname, string email, string username, string password
+            //, string phone
+            )
         {
             Name = name;
             Surname = surname;
             Email = email;
-            Username = username; // TODO: ensure unique username <------
+            Username = username;
             SetPassword(password);
+           // Phone = phone;
             //Folders = RetrieveUserFolders();
         }
 

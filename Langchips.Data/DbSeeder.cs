@@ -16,11 +16,11 @@ namespace Langchips.Models.Helpers
             {
                 var users = new List<User>
                 {
-                    new User("John", "Doe", "john.doe@example.com", "Password123", "john_doe"),
-                    new User("Jane", "Smith", "jane.smith@example.com", "Password123", "jane_smith"),
-                    new User("Alice", "Johnson", "alice.johnson@example.com", "Password123", "alice_johnson"),
-                    new User("Bob", "Williams", "bob.williams@example.com", "Password123", "bob_williams"),
-                    new User("Charlie", "Brown", "charlie.brown@example.com", "Password123", "charlie_brown")
+                    new User("John", "Doe", "john.doe@example.com", "john_doe", "Password123"),
+                    new User("Jane", "Smith", "jane.smith@example.com",  "jane_smith", "Password123"),
+                    new User("Alice", "Johnson", "alice.johnson@example.com", "alice_johnson", "Password123"),
+                    new User("Bob", "Williams", "bob.williams@example.com", "bob_williams", "Password123"),
+                    new User("Charlie", "Brown", "charlie.brown@example.com", "charlie_brown", "Password123")
                 };
 
                 dbContext.Users.AddRange(users);
