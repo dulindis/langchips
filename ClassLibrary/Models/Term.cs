@@ -16,6 +16,7 @@ namespace Langchips.Models.Models
         [Required]
         [StringLength(255)]
         public string InputPhrase { get; set; }
+        //TODO: think about sound file
 
         [Required]
         public int SetId { get; set; }

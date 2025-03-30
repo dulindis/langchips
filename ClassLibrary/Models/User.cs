@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Langchips.Models
 {
-    public class User
+    public class User : IPerson
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

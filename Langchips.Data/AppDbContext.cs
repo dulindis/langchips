@@ -36,6 +36,14 @@ namespace Langchips.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>()
+                        .HasIndex(u => u.Email)
+                        .IsUnique();
+
+            modelBuilder.Entity<User>()
+                       .HasIndex(u => u.Username)
+                       .IsUnique();
+
             // User - Set relationship (One-to-Many)
             modelBuilder.Entity<Set>()
                 .HasOne(s => s.User) // Set has one User (creator)

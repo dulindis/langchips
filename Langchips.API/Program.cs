@@ -16,7 +16,6 @@ namespace Langchips.API
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
-
             builder.Services.AddScoped<ConfigurationService>();
 
             builder.Services.AddEndpointsApiExplorer();
