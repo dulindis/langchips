@@ -122,6 +122,18 @@ namespace Langchips.Data.Migrations
                 name: "IX_Translations_TermId",
                 table: "Translations",
                 column: "TermId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Username",
+                table: "Users",
+                column: "Username",
+                unique: true);
         }
 
         /// <inheritdoc />
