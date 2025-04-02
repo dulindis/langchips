@@ -1,4 +1,5 @@
-﻿using Langchips.Blazor.AuthProviders;
+﻿using Blazored.LocalStorage;
+using Langchips.Blazor.AuthProviders;
 using Langchips.Blazor.Components;
 using Langchips.Data;
 using Langchips.Services;
@@ -19,23 +20,25 @@ namespace Langchips.Blazor
 
             builder.Services.AddAuthorizationCore();
 
-            builder.Services.AddScoped<AuthenticationStateProvider, TestAuthStateProvider>();
+            builder.Services.AddBlazoredLocalStorage();
+
+            builder.Services.AddScoped<AuthStateProvider>();
+            builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<AuthStateProvider>());
 
             builder.Services.AddSingleton<ConfigurationService>();
             var configService = new ConfigurationService(builder.Configuration);
             var apiBaseUrl = configService.GetApiBaseUrl();
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseUrl) });
 
-            builder.Services.AddScoped<ApiService>();
+            builder.Services.AddHttpClient("ApiClient", client =>
+            {
+                client.BaseAddress = new Uri(apiBaseUrl);
+            });
 
+            var app = builder.Build(); //TODO:async, check await builder.Build().RunAsync();
 
-            var app = builder.Build();//TODO: async
-
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -48,8 +51,6 @@ namespace Langchips.Blazor
                 .AddInteractiveServerRenderMode();
 
             app.Run();
-            //await builder.Build().RunAsync();
-
         }
     }
 }
