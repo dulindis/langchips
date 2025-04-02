@@ -35,7 +35,6 @@ namespace Langchips.Models
 
         [Required]
         [StringLength(200)]
-        //TODO: pass stored as hash
         public string PasswordHash { get; private set; }
 
         [Required]
@@ -50,7 +49,8 @@ namespace Langchips.Models
         public ICollection<Set> OwnedSets { get; set; } = new List<Set>();    // Sets owned by user
         //public ICollection<Folder> Folders { get; set; } = new List<Folder>();  // One-to-Many Relationship
 
-        //TODO: add status field and add updatedfield, aybe phone field
+        //TODO: add status field and add updatedfield, phone field
+        //TODO: level admin or regular user
         public User() {
             CreatedAt = DateTime.UtcNow;
         }
