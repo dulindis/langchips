@@ -1,0 +1,13 @@
+﻿@using Langchips.Blazor.AuthProviders
+@inject AuthStateProvider AuthProvider
+@inject NavigationManager Nav
+
+<h3>Logging out...</h3>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await AuthProvider.Logout();
+        Nav.NavigateTo("/sign-in", forceLoad: true);
+    }
+}

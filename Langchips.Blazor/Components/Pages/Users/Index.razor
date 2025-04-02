@@ -1,0 +1,122 @@
+﻿@page "/Users"
+@using Langchips.Models
+@inject IHttpClientFactory HttpClientFactory
+@rendermode InteractiveServer 
+[Authorize]
+
+<h1 class="text-center mb-3">List of Users</h1>
+
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @errorMessage
+    </div>
+}
+else if (users == null)
+{
+    <p>Loading users...</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Created At</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Name @user.Surname</td>
+                    <td>@user.Username</td>
+                    <td>@user.Email</td>
+                    <td>@user.CreatedAt.ToShortDateString()</td>
+                    <td style="white-space:nowrap">
+                        <a class="btn btn-primary btn-sm" href="/Users/Edit/@user.Id">Edit</a>
+                        <a class="btn btn-danger btn-sm" @onclick="() => DeleteUser(user.Id)">Delete</a>
+                            </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+@code {
+    private List<User>? users = null;
+    private string? errorMessage;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var client = HttpClientFactory.CreateClient("ApiClient");
+            string apiUrl = "Users";
+
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+
+            users = await client.GetFromJsonAsync<List<User>>(apiUrl,cts.Token);
+
+            if (users == null)
+            {
+                errorMessage = "No users retrieved from API.";
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            errorMessage = "Request timed out. Please check your network.";
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = $"Network error: {ex.Message}";
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching users: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task DeleteUser(Guid id)
+    {
+        try
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://localhost:7104/api/");
+            var response = await client.DeleteAsync($"Users/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("User deleted successfully.");
+                users.RemoveAll(u => u.Id == id); 
+                StateHasChanged();
+            }
+            else
+            {
+                Console.WriteLine("Error deleting user: " + response.ReasonPhrase);
+                errorMessage = $"Error deleting user: {response.ReasonPhrase}";
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in DeleteUser: {ex.Message}");
+            errorMessage = "An error occurred while deleting the user.";
+        }
+    }
+
+}

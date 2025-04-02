@@ -1,0 +1,20 @@
+﻿@page "/protected"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@attribute [Authorize]
+
+<h3>ProtectedPage</h3>
+
+<AuthorizeView>
+    <Authorized>
+        <p>You are authorized to see this page!</p>
+        <!-- Here you can put your data that should be visible only to authenticated users -->
+    </Authorized>
+    <NotAuthorized>
+        <p>You are not authorized to view this page. Please log in first.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+}

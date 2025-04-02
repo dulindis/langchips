@@ -5,6 +5,7 @@ using Langchips.Models;
 using Langchips.Services;
 using Microsoft.EntityFrameworkCore;
 using Langchips.Models.Helpers;
+using Microsoft.AspNetCore.Components.Authorization;
 
 
 namespace Langchips.API
@@ -17,6 +18,11 @@ namespace Langchips.API
 
             builder.Services.AddControllers();
             builder.Services.AddScoped<ConfigurationService>();
+
+            // Register the ApiBaseUrl in DI container
+            builder.Services.AddSingleton(sp => builder.Configuration["ApiBaseUrl"]);
+
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

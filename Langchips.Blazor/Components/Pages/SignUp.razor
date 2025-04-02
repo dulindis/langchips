@@ -1,15 +1,39 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using Langchips.Models.DTOs
+@inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager Navigation
 
-@page "/sign-up"
+@page "/sign-up" 
 @rendermode InteractiveServer
 
 <PageTitle>Sign Up</PageTitle>
 
 <h3>Sign Up</h3>
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+        <div class="alert alert-danger">@errorMessage</div>
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+        <div class="alert alert-success">@successMessage</div>
+}
 
 <EditForm Model="newUser" OnValidSubmit="HandleSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="name" class="form-label">First Name</label>
+        <InputText id="name" class="form-control" @bind-Value="newUser.Name" />
+        <ValidationMessage For="@(() => newUser.Username)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="surname" class="form-label">Surame</label>
+        <InputText id="name" class="form-control" @bind-Value="newUser.Surname" />
+        <ValidationMessage For="@(() => newUser.Surname)" />
+    </div>
 
     <div class="mb-3">
         <label for="username" class="form-label">Username</label>
@@ -35,34 +59,48 @@
         <ValidationMessage For="@(() => newUser.ConfirmPassword)" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Sign Up</button>
+    <button type="submit" class="btn btn-primary" disabled="@isSubmitting">
+        @(isSubmitting ? "Signing Up..." : "Sign Up")
+    </button>
 </EditForm>
 
 
 @code {
-    private UserModel newUser = new();
+    private UserDTO newUser = new();
+    private string errorMessage = "";
+    private string successMessage = "";
+    private bool isSubmitting = false;
 
-    private void HandleSubmit()
+    private async Task HandleSubmit()
     {
-        // Handle sign-up logic here (e.g., send data to an API)
-        Console.WriteLine($"User Registered: {newUser.Username}, {newUser.Email}");
-    }
+        isSubmitting = true;
+        errorMessage = "";
+        successMessage = "";
 
-    public class UserModel
-    {
-        [Required(ErrorMessage = "Username is required")]
-        public string Username { get; set; } = string.Empty;
+        try
+        {
+            var client = HttpClientFactory.CreateClient("ApiClient");
+            var response = await client.PostAsJsonAsync("api/Users", newUser);
 
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid email format")]
-        public string Email { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Password is required")]
-        [MinLength(6, ErrorMessage = "Password must be at least 6 characters")]
-        public string Password { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Please confirm your password")]
-        [Compare("Password", ErrorMessage = "Passwords do not match")]
-        public string ConfirmPassword { get; set; } = string.Empty;
+            if (response.IsSuccessStatusCode)
+            {
+                successMessage = "Account created successfully!";
+                await Task.Delay(5000); // Wait a bit before redirecting
+                Navigation.NavigateTo("/sign-in"); // Redirect to login page
+            }
+            else
+            {
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                errorMessage = $"Sign-up failed: {errorResponse}";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
     }
 }

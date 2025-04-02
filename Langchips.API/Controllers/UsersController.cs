@@ -1,6 +1,7 @@
 ﻿using Langchips.Data;
 using Langchips.Models;
 using Langchips.Models.DTOs;
+using Langchips.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,14 +13,19 @@ namespace Langchips.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public UsersController(AppDbContext context)
+        private readonly string _apiBaseUrl;
+        public UsersController(AppDbContext context,
+            IConfiguration configuration
+            )
         {
             _context = context;
+            _apiBaseUrl = configuration["ApiBaseUrl"];
         }
 
         [HttpGet]
         public async Task<ActionResult<List<User>>> GetUsers()
         {
+            Console.WriteLine($"API Base URL: {_apiBaseUrl}");
             var users = await _context.Users.OrderByDescending(c => c.Id).ToListAsync();
             return Ok(users);
         }
@@ -106,7 +112,7 @@ namespace Langchips.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> DeteleUser(Guid id)
+        public async Task<ActionResult<User>> DeleteUser(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
